@@ -1,5 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:latihan_firestore/pages/mainpage.dart';
+import 'package:latihan_firestore/pages/form_page.dart';
+import 'package:latihan_firestore/pages/history_page.dart';
 import 'package:latihan_firestore/utils/firestore.realtime.dart';
 
 void main() async {
@@ -14,12 +18,18 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
+      title: 'Latihan Firestore',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        useMaterial3: true,
       ),
-      home: null,
+      home: const TodoListPage(),
+      routes: {
+        '/add': (_) => const TodoFormPage(),
+        '/history': (_) => const HistoryPage(),
+      },
+      debugShowCheckedModeBanner: false,
     );
   }
 }
