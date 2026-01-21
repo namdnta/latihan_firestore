@@ -78,7 +78,7 @@ class DatabaseService {
 
     for (var key in todos.keys) {
       await todoRef(key.toString()).update({
-        'isCompleted': true,
+        'isDone': true,
         'updatedAt': DateTime.now().toIso8601String(),
       });
     }
