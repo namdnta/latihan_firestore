@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "922840526457",
+    "firebase_url": "https://latihan-firestore-b951f-default-rtdb.firebaseio.com",
+    "project_id": "latihan-firestore-b951f",
+    "storage_bucket": "latihan-firestore-b951f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922840526457:android:6bb7ec6d07c03ca0e56ea8",
+        "android_client_info": {
+          "package_name": "com.example.latihan_firestore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBskaB3Wey656-HJcm1W54KPIXfgWz2HLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
