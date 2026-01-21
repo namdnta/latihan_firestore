@@ -10,7 +10,7 @@ class IdGenerator {
     return shortId;
   }
 
-  Future<bool> _isIdExists(String id) async {
+  static isIdExists(String id) async {
     try {
       final snapshot = await DatabaseService.todoRef(id).once();
       return snapshot.snapshot.value != null;
@@ -27,7 +27,7 @@ class IdGenerator {
       id = IdGenerator.generateShortUuid();
       attempts++;
 
-      final exists = await _isIdExists(id);
+      final exists = await isIdExists(id);
       if (!exists) {
         return id;
       }
