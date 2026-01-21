@@ -1,39 +1,72 @@
+// controllers/delete_controller.dart - FINAL VERSION
 import 'package:latihan_firestore/services/delete.service.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:latihan_firestore/services/history.service.dart';
 
 class DeleteController {
   final DeleteService _deleteService = DeleteService();
+  final HistoryService _historyService = HistoryService();
 
   Future<Map<String, dynamic>> deleteTodo(String id) async {
     print('🎛️ DeleteController: Processing delete request for $id');
 
-    // Validation
-    if (id.isEmpty) {
+    try {
+      // 1. Get data sebelum dihapus (untuk history)
+      final snapshot = await FirebaseDatabase.instance
+          .ref()
+          .child('todos')
+          .child(id)
+          .once();
+
+      if (!snapshot.snapshot.exists) {
+        return {
+          'success': false,
+          'error': 'Not Found',
+          'message': 'Todo with ID $id not found',
+        };
+      }
+
+      final Map<String, dynamic> deletedData = Map<String, dynamic>.from(
+        snapshot.snapshot.value as Map,
+      );
+
+      // 2. Validation
+      if (id.isEmpty || id.length != 5) {
+        return {
+          'success': false,
+          'error': 'Validation',
+          'message': 'Todo ID must be 5 characters',
+        };
+      }
+
+      // 3. Call service
+      final result = await _deleteService.deleteTodo(id);
+
+      // 4. Log history jika berhasil
+      if (result['success'] == true) {
+        await _historyService.logDelete(
+          todoId: id,
+          deletedData: deletedData,
+          userId: _getCurrentUserId(),
+          reason: 'User deleted from app',
+        );
+
+        print('✅ DeleteController: Todo $id deleted + history logged');
+      } else {
+        print(
+          '❌ DeleteController: Failed: ${result['error'] ?? "Unknown error"}',
+        ); // ⭐ FIX NULL
+      }
+
+      return result;
+    } catch (e) {
+      print('❌ DeleteController Error: $e');
       return {
         'success': false,
-        'error': 'Validation',
-        'message': 'Todo ID is required',
+        'error': 'Exception',
+        'message': 'Error deleting todo: $e',
       };
     }
-
-    if (id.length != 5) {
-      return {
-        'success': false,
-        'error': 'Validation',
-        'message': 'Todo ID must be 5 characters',
-      };
-    }
-
-    // Call service
-    final result = await _deleteService.deleteTodo(id);
-
-    // Log result
-    if (result['success'] == true) {
-      print('✅ DeleteController: Todo $id deleted');
-    } else {
-      print('❌ DeleteController: Failed: ${result['error']}');
-    }
-
-    return result;
   }
 
   Future<Map<String, dynamic>> deleteMultipleTodos(List<String> ids) async {
@@ -61,12 +94,56 @@ class DeleteController {
       };
     }
 
+    // Get all data sebelum dihapus untuk history
+    final List<Map<String, dynamic>> todosToDelete = [];
+
+    for (final id in validIds) {
+      final snapshot = await FirebaseDatabase.instance
+          .ref()
+          .child('todos')
+          .child(id)
+          .once();
+
+      if (snapshot.snapshot.exists) {
+        final todoData = Map<String, dynamic>.from(
+          snapshot.snapshot.value as Map,
+        );
+        todosToDelete.add({'id': id, 'data': todoData});
+      }
+    }
+
     // Call service
     final result = await _deleteService.deleteMultiple(validIds);
 
-    print('📊 DeleteController: ${result['message']}');
+    // Log history untuk yang berhasil dihapus
+    if (result['success'] == true) {
+      final userId = _getCurrentUserId();
+
+      for (final todo in todosToDelete) {
+        await _historyService.logDelete(
+          todoId: todo['id'],
+          deletedData: todo['data'],
+          userId: userId,
+          reason: 'Batch delete operation',
+        );
+      }
+
+      print('📊 DeleteController: ${result['message']} + history logged');
+    } else {
+      print('📊 DeleteController: ${result['message']}');
+    }
 
     return result;
+  }
+
+  // Helper untuk mendapatkan userId
+  String _getCurrentUserId() {
+    // ⭐ IMPLEMENTASI SESUAI AUTH SYSTEM ANDA
+    // Contoh dengan Firebase Auth:
+    // return FirebaseAuth.instance.currentUser?.uid ?? 'anonymous_user';
+
+    // Untuk sementara, pakai timestamp-based userId
+    return 'user_${DateTime.now().millisecondsSinceEpoch}';
   }
 
   // Confirm delete dialog helper
@@ -75,6 +152,7 @@ class DeleteController {
       'id': id,
       'message': 'Are you sure you want to delete this todo?',
       'action': 'delete',
+      'requiresConfirmation': true,
     };
   }
 
@@ -84,6 +162,7 @@ class DeleteController {
       'ids': ids,
       'message': 'Are you sure you want to delete ${ids.length} todos?',
       'action': 'delete_multiple',
+      'requiresConfirmation': true,
     };
   }
 }
