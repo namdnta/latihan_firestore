@@ -1,7 +1,9 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    // 1. Tambahkan plugin Google Services di sini
+    id("com.google.gms.google-services")
+    // Flutter plugin harus tetap di bawah
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -20,11 +22,10 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.latihan_firestore"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // Untuk Firebase/Firestore, biasanya disarankan minSdk minimal 21 atau 23
+        // Jika flutter.minSdkVersion terlalu rendah, Anda bisa manual set ke 21
+        minSdk = flutter.minSdkVersion 
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -32,8 +33,6 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
         }
     }
@@ -41,4 +40,10 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // Di Flutter, dependensi Firebase biasanya diatur di 'pubspec.yaml'.
+    // Namun, platform BoM tetap bisa ditambahkan untuk memastikan kompatibilitas versi native.
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
 }
