@@ -1,4 +1,5 @@
 // controllers/delete_controller.dart - FINAL VERSION
+import 'dart:developer' show log;
 import 'package:latihan_firestore/services/delete.service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:latihan_firestore/services/history.service.dart';
@@ -8,7 +9,7 @@ class DeleteController {
   final HistoryService _historyService = HistoryService();
 
   Future<Map<String, dynamic>> deleteTodo(String id) async {
-    print('🎛️ DeleteController: Processing delete request for $id');
+    log('🎛️ DeleteController: Processing delete request for $id');
 
     try {
       // 1. Get data sebelum dihapus (untuk history)
@@ -51,16 +52,16 @@ class DeleteController {
           reason: 'User deleted from app',
         );
 
-        print('✅ DeleteController: Todo $id deleted + history logged');
+        log('✅ DeleteController: Todo $id deleted + history logged');
       } else {
-        print(
+        log(
           '❌ DeleteController: Failed: ${result['error'] ?? "Unknown error"}',
         ); // ⭐ FIX NULL
       }
 
       return result;
     } catch (e) {
-      print('❌ DeleteController Error: $e');
+      log('❌ DeleteController Error: $e');
       return {
         'success': false,
         'error': 'Exception',
@@ -70,7 +71,7 @@ class DeleteController {
   }
 
   Future<Map<String, dynamic>> deleteMultipleTodos(List<String> ids) async {
-    print('🎛️ DeleteController: Processing delete for ${ids.length} todos');
+    log('🎛️ DeleteController: Processing delete for ${ids.length} todos');
 
     // Validation
     if (ids.isEmpty) {
@@ -128,9 +129,9 @@ class DeleteController {
         );
       }
 
-      print('📊 DeleteController: ${result['message']} + history logged');
+      log('📊 DeleteController: ${result['message']} + history logged');
     } else {
-      print('📊 DeleteController: ${result['message']}');
+      log('📊 DeleteController: ${result['message']}');
     }
 
     return result;

@@ -21,7 +21,7 @@ class CategoryDropdown extends StatelessWidget {
         const Text('Category', style: TextStyle(color: AppColors.textPrimary)),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: selectedCategory,
+          initialValue: selectedCategory,
           items: categories
               .map((e) => DropdownMenuItem(value: e, child: Text(_label(e))))
               .toList(),

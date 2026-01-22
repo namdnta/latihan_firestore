@@ -40,12 +40,14 @@ class CustomFloatingActionButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onPressed;
   final Color? backgroundColor;
+  final Object? heroTag;
 
   const CustomFloatingActionButton({
     super.key,
     required this.icon,
     this.onPressed,
     this.backgroundColor,
+    this.heroTag,
   });
 
   @override
@@ -54,6 +56,7 @@ class CustomFloatingActionButton extends StatelessWidget {
       onPressed: onPressed,
       backgroundColor: backgroundColor ?? AppColors.cardBackground,
       foregroundColor: AppColors.textPrimary,
+      heroTag: heroTag,
       child: Icon(icon),
     );
   }

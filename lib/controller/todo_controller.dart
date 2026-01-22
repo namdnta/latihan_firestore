@@ -1,4 +1,5 @@
 // controllers/todo_controller.dart - FINAL CLEAN VERSION
+import 'dart:developer' show log;
 import 'package:get/get.dart';
 import 'package:latihan_firestore/services/history.service.dart';
 import 'package:latihan_firestore/services/list_service.dart';
@@ -54,7 +55,7 @@ class TodoController extends GetxController {
         isLoading.value = false;
       },
       onError: (error) {
-        print('❌ Error fetching todos: $error');
+        log('❌ Error fetching todos: $error');
         isLoading.value = false;
       },
     );
@@ -81,7 +82,7 @@ class TodoController extends GetxController {
           .once();
 
       if (!oldSnapshot.snapshot.exists) {
-        print('❌ TodoController: Todo $id not found');
+        log('❌ TodoController: Todo $id not found');
         isLoading.value = false;
         return;
       }
@@ -134,12 +135,12 @@ class TodoController extends GetxController {
           todos.refresh();
         }
 
-        print('✅ TodoController: Todo updated + history logged');
+        log('✅ TodoController: Todo updated + history logged');
       } else {
-        print('❌ Update failed: ${result['message']}');
+        log('❌ Update failed: ${result['message']}');
       }
     } catch (e) {
-      print('❌ TodoController Error: $e');
+      log('❌ TodoController Error: $e');
     }
 
     isLoading.value = false;
@@ -153,23 +154,23 @@ class TodoController extends GetxController {
     required bool wasDoneBefore,
     required bool isDoneNow,
   }) async {
-    // A. Log completion jika TODO baru selesai (false → true)
+
     if (!wasDoneBefore && isDoneNow) {
       await _historyService.logCompletion(
         todoId: id,
         todoData: newData,
         userId: _currentUserId.value,
       );
-      print('🎯 Todo marked as COMPLETED - history logged');
+      log('🎯 Todo marked as COMPLETED - history logged');
     }
-    // B. Log reopen jika TODO dibuka kembali (true → false)
+
     else if (wasDoneBefore && !isDoneNow) {
       await _historyService.logReopen(
         todoId: id,
         todoData: newData,
         userId: _currentUserId.value,
       );
-      print('↩️ Todo REOPENED - history logged');
+      log('↩️ Todo REOPENED - history logged');
     }
     // C. Log regular update untuk field lain (selain isDone)
     else if (_hasNonIsDoneChanges(oldData, newData)) {
@@ -179,7 +180,7 @@ class TodoController extends GetxController {
         newData: newData,
         userId: _currentUserId.value,
       );
-      print('📝 Regular UPDATE - history logged');
+      log('📝 Regular UPDATE - history logged');
     }
   }
 
