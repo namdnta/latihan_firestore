@@ -30,15 +30,18 @@ class FloatingNavBar extends StatelessWidget {
           CustomFloatingActionButton(
             icon: Icons.check_circle,
             onPressed: onToHistory,
+            heroTag: null,
             backgroundColor: AppColors.completed,
           ),
           CustomFloatingActionButton(
             icon: Icons.add,
             onPressed: onToAdd,
+            heroTag: null,
           ),
           CustomFloatingActionButton(
             icon: Icons.list_alt,
             onPressed: onToMain,
+            heroTag: null,
             backgroundColor: AppColors.primaryGreen,
           ),
         ],

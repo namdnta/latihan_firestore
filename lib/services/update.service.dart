@@ -1,3 +1,4 @@
+import 'dart:developer' show log;
 import 'package:latihan_firestore/utils/firestore.realtime.dart';
 
 class UpdateService {
@@ -30,7 +31,7 @@ class UpdateService {
         'message': 'Todo updated successfully',
       };
     } catch (e) {
-      print('❌ UpdateService Error: $e');
+      log('❌ UpdateService Error: $e');
       return {
         'success': false,
         'error': e.toString(),

@@ -1,3 +1,4 @@
+import 'dart:developer' show log;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -15,7 +16,7 @@ class DatabaseService {
           'https://latihan-firestore-b951f-default-rtdb.firebaseio.com/',
     );
 
-    print('✅ DatabaseService initialized at: ${_database.databaseURL}');
+    log('✅ DatabaseService initialized at: ${_database.databaseURL}');
   }
 
   static DatabaseReference get todosRef {
@@ -33,10 +34,10 @@ class DatabaseService {
   static Future<bool> testConnection() async {
     try {
       await _database.ref().child('.info/connected').once();
-      print('✅ Database connection test: PASSED');
+      log('✅ Database connection test: PASSED');
       return true;
     } catch (e) {
-      print('❌ Database connection test: FAILED - $e');
+      log('❌ Database connection test: FAILED - $e');
       return false;
     }
   }
@@ -44,12 +45,12 @@ class DatabaseService {
   static void enablePersistence({int cacheSizeMB = 10}) {
     _database.setPersistenceEnabled(true);
     _database.setPersistenceCacheSizeBytes(cacheSizeMB * 1024 * 1024);
-    print('💾 Persistence enabled (${cacheSizeMB}MB cache)');
+    log('💾 Persistence enabled (${cacheSizeMB}MB cache)');
   }
 
   static Future<void> clearCache() async {
     await _database.ref().keepSynced(false);
-    print('🧹 Database cache cleared');
+    log('🧹 Database cache cleared');
   }
 
   static Query priorityQuery(String priority) {
@@ -66,7 +67,7 @@ class DatabaseService {
 
   static Future<void> deleteAllTodos() async {
     await todosRef.remove();
-    print('🗑️ All todos deleted');
+    log('🗑️ All todos deleted');
   }
 
   static Future<void> markAllAsCompleted() async {
@@ -83,7 +84,7 @@ class DatabaseService {
       });
     }
 
-    print('✅ All todos marked as completed');
+    log('✅ All todos marked as completed');
   }
 }
 //

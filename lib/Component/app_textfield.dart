@@ -4,6 +4,9 @@ import 'package:latihan_firestore/Component/colors.dart' show AppColors;
 class AppTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
+  final String hintText;
+  final int maxLines;
+  final String? Function(String?)? validator;
   final bool readOnly;
   final VoidCallback? onTap;
 
@@ -11,8 +14,11 @@ class AppTextField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.label,
+    required this.hintText,
+    required this.maxLines,
+    required this.validator,
     this.readOnly = false,
-    this.onTap, required String hintText, required int maxLines, required String? Function(dynamic value) validator,
+    this.onTap,
   });
 
   @override
@@ -20,17 +26,22 @@ class AppTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w600,
-            )),
+        Text(
+          label,
+          style: const TextStyle(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         const SizedBox(height: 6),
-        TextField(
+        TextFormField(
           controller: controller,
           readOnly: readOnly,
           onTap: onTap,
+          maxLines: maxLines,
+          validator: validator,
           decoration: InputDecoration(
+            hintText: hintText,
             filled: true,
             fillColor: AppColors.cardBackground,
             border: OutlineInputBorder(

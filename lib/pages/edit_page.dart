@@ -5,6 +5,7 @@ import 'package:latihan_firestore/Component/category_dropdown.dart';
 import 'package:latihan_firestore/Component/colors.dart';
 import 'package:latihan_firestore/Component/priority_selector.dart' as chip_selector;
 import 'package:latihan_firestore/Component/section_header.dart';
+import 'package:latihan_firestore/Component/date_picker_field.dart';
 import 'package:latihan_firestore/services/update.service.dart';
 
 class EditPage extends StatefulWidget {
@@ -153,7 +154,7 @@ class _EditPageState extends State<EditPage> {
                             return 'Please enter a task name';
                           }
                           return null;
-                        }, maxLines: null,
+                        }, maxLines: 1,
                       ),
                       const SizedBox(height: 20),
                       DatePickerField(
@@ -188,7 +189,9 @@ class _EditPageState extends State<EditPage> {
                         label: 'Description',
                         hintText: 'Add task description...',
                         controller: _descriptionController,
-                        maxLines: 3, validator: (value) {  },
+                        maxLines: 3, validator: (value) {
+                          return null;
+                          },
                       ),
                       const SizedBox(height: 40),
                       Row(

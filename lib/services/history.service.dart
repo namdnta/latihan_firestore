@@ -1,9 +1,10 @@
+import 'dart:developer' show log;
 import 'package:firebase_database/firebase_database.dart';
 
 class HistoryService {
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
-  /// Log history untuk operasi UPDATE (menerima Map<dynamic, dynamic>)
+  /// Log history untuk operasi UPDATE (menerima `Map<dynamic, dynamic>`)
   Future<void> logUpdate({
     required String todoId,
     required Map<dynamic, dynamic> oldData, // ⭐ TERIMA DYNAMIC
@@ -27,13 +28,13 @@ class HistoryService {
 
       await _database.child('history').child(historyId).set(historyLog);
 
-      print('📝 ModifiedHistoryService: Update logged for todo $todoId');
+      log('📝 ModifiedHistoryService: Update logged for todo $todoId');
     } catch (e) {
-      print('❌ ModifiedHistoryService Error: $e');
+      log('❌ ModifiedHistoryService Error: $e');
     }
   }
 
-  /// Log history untuk operasi DELETE (menerima Map<dynamic, dynamic>)
+  /// Log history untuk operasi DELETE (menerima `Map<dynamic, dynamic>`)
   Future<void> logDelete({
     required String todoId,
     required Map<dynamic, dynamic> deletedData, // ⭐ TERIMA DYNAMIC
@@ -56,9 +57,9 @@ class HistoryService {
 
       await _database.child('history').child(historyId).set(historyLog);
 
-      print('🗑️ ModifiedHistoryService: Delete logged for todo $todoId');
+      log('🗑️ ModifiedHistoryService: Delete logged for todo $todoId');
     } catch (e) {
-      print('❌ ModifiedHistoryService Error: $e');
+      log('❌ ModifiedHistoryService Error: $e');
     }
   }
 
@@ -83,9 +84,9 @@ class HistoryService {
 
       await _database.child('history').child(historyId).set(historyLog);
 
-      print('✅ ModifiedHistoryService: Completion logged for todo $todoId');
+      log('✅ ModifiedHistoryService: Completion logged for todo $todoId');
     } catch (e) {
-      print('❌ ModifiedHistoryService Completion Error: $e');
+      log('❌ ModifiedHistoryService Completion Error: $e');
     }
   }
 
@@ -110,9 +111,9 @@ class HistoryService {
 
       await _database.child('history').child(historyId).set(historyLog);
 
-      print('↩️ ModifiedHistoryService: Reopen logged for todo $todoId');
+      log('↩️ ModifiedHistoryService: Reopen logged for todo $todoId');
     } catch (e) {
-      print('❌ ModifiedHistoryService Reopen Error: $e');
+      log('❌ ModifiedHistoryService Reopen Error: $e');
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:latihan_firestore/Component/colors.dart';
 import 'package:latihan_firestore/controller/delete.controller.dart';
 import 'package:latihan_firestore/controller/todo_controller.dart';
+import 'package:latihan_firestore/pages/edit_page.dart';
 
 
 class TodoCard extends StatelessWidget {
@@ -54,6 +55,15 @@ class TodoCard extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.edit, color: AppColors.textPrimary),
+            onPressed: () async {
+              final result = await Get.to<bool>(() => EditPage(todo: todo));
+              if (result == true) {
+                Get.snackbar('Updated', 'Task updated successfully');
+              }
+            },
           ),
           IconButton(
             icon: const Icon(Icons.delete, color: AppColors.urgent),

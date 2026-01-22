@@ -1,3 +1,4 @@
+import 'dart:developer' show log;
 import 'package:latihan_firestore/services/create.service.dart';
 
 class CreateController {
@@ -10,7 +11,7 @@ class CreateController {
     required String category,
     String description = '',
   }) async {
-    print('🎛️ CreateController: Processing create request...');
+    log('🎛️ CreateController: Processing create request...');
 
     // Validation
     if (taskName.isEmpty) {
@@ -56,9 +57,9 @@ class CreateController {
 
     // Log result
     if (result['success'] == true) {
-      print('✅ CreateController: Todo created! ID: ${result['id']}');
+      log('✅ CreateController: Todo created! ID: ${result['id']}');
     } else {
-      print('❌ CreateController: Failed: ${result['error']}');
+      log('❌ CreateController: Failed: ${result['error']}');
     }
 
     return result;

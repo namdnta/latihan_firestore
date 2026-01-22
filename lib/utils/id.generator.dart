@@ -19,28 +19,6 @@ class IdGenerator {
     }
   }
 
-  Future<String> _generateUniqueId() async {
-    String id;
-    int attempts = 0;
-
-    do {
-      id = IdGenerator.generateShortUuid();
-      attempts++;
-
-      final exists = await isIdExists(id);
-      if (!exists) {
-        return id;
-      }
-
-      print('⚠️ ID $id already exists, retrying... (attempt $attempts)');
-    } while (attempts < 5);
-
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
-    id = timestamp.toString().substring(timestamp.toString().length - 5);
-    print('🔄 Using fallback ID: $id');
-
-    return id;
-  }
 }
 
 //

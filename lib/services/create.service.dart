@@ -1,3 +1,4 @@
+import 'dart:developer' show log;
 import 'package:latihan_firestore/utils/firestore.realtime.dart';
 import 'package:latihan_firestore/utils/id.generator.dart';
 
@@ -16,7 +17,7 @@ class CreateService {
         return id;
       }
 
-      print('⚠️ ID $id exists, retry $attempts');
+      log('⚠️ ID $id exists, retry $attempts');
     } while (attempts < 5);
 
     // Fallback ID
@@ -33,10 +34,10 @@ class CreateService {
     String description = '',
   }) async {
     try {
-      print('🎯 CreateService: Creating todo...');
+      log('🎯 CreateService: Creating todo...');
 
       final String id = await _generateUniqueId();
-      print('✅ Generated ID: $id');
+      log('✅ Generated ID: $id');
 
       final Map<String, dynamic> todoData = {
         'id': id,
@@ -60,7 +61,7 @@ class CreateService {
       }
 
       await DatabaseService.todoRef(id).set(todoData);
-      print('💾 Todo saved: $id');
+      log('💾 Todo saved: $id');
 
       return {
         'success': true,
@@ -69,7 +70,7 @@ class CreateService {
         'message': 'Todo created successfully',
       };
     } catch (e) {
-      print('❌ CreateService Error: $e');
+      log('❌ CreateService Error: $e');
       return {
         'success': false,
         'error': e.toString(),

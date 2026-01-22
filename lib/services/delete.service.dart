@@ -1,10 +1,11 @@
+import 'dart:developer' show log;
 import 'package:latihan_firestore/utils/firestore.realtime.dart';
 
 class DeleteService {
   // DELETE TODO
   Future<Map<String, dynamic>> deleteTodo(String id) async {
     try {
-      print('🗑️ DeleteService: Deleting todo $id...');
+      log('🗑️ DeleteService: Deleting todo $id...');
 
       // 1. Check if exists
       final snapshot = await DatabaseService.todoRef(id).once();
@@ -18,7 +19,7 @@ class DeleteService {
 
       // 2. Delete
       await DatabaseService.todoRef(id).remove();
-      print('✅ Todo $id deleted');
+      log('✅ Todo $id deleted');
 
       return {
         'success': true,
@@ -26,7 +27,7 @@ class DeleteService {
         'message': 'Todo deleted successfully',
       };
     } catch (e) {
-      print('❌ DeleteService Error: $e');
+      log('❌ DeleteService Error: $e');
       return {
         'success': false,
         'error': e.toString(),
@@ -38,7 +39,7 @@ class DeleteService {
   // DELETE MULTIPLE TODOS
   Future<Map<String, dynamic>> deleteMultiple(List<String> ids) async {
     try {
-      print('🗑️ DeleteService: Deleting ${ids.length} todos...');
+      log('🗑️ DeleteService: Deleting ${ids.length} todos...');
 
       int successCount = 0;
       List<String> failedIds = [];
