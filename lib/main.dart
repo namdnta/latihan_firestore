@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:latihan_firestore/pages/mainpage.dart';
 import 'package:latihan_firestore/pages/form_page.dart';
-import 'package:latihan_firestore/pages/history_page.dart';
+import 'package:latihan_firestore/pages/History_page.dart';
 import 'package:latihan_firestore/utils/firestore.realtime.dart';
 
 void main() async {
@@ -24,6 +24,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
+      defaultTransition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 250),
       home: const TodoListPage(),
       routes: {
         '/add': (_) => const TodoFormPage(),
