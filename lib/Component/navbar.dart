@@ -28,10 +28,10 @@ class FloatingNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           CustomFloatingActionButton(
-            icon: Icons.check_circle,
-            onPressed: onToHistory,
+            icon: Icons.list_alt,
+            onPressed: onToMain,
             heroTag: null,
-            backgroundColor: AppColors.completed,
+            backgroundColor: AppColors.primaryGreen,
           ),
           CustomFloatingActionButton(
             icon: Icons.add,
@@ -39,10 +39,10 @@ class FloatingNavBar extends StatelessWidget {
             heroTag: null,
           ),
           CustomFloatingActionButton(
-            icon: Icons.list_alt,
-            onPressed: onToMain,
+            icon: Icons.check_circle,
+            onPressed: onToHistory,
             heroTag: null,
-            backgroundColor: AppColors.primaryGreen,
+            backgroundColor: AppColors.completed,
           ),
         ],
       ),
