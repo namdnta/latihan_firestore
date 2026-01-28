@@ -38,7 +38,7 @@ class CategoryDropdown extends StatelessWidget {
               borderSide: const BorderSide(color: AppColors.lightGray),
             ),
           ),
-        )
+        ),
       ],
     );
   }

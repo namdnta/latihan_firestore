@@ -43,7 +43,10 @@ class TodoCard extends StatelessWidget {
           onChanged: (_) => onToggle?.call(),
           activeColor: AppColors.primaryGreen,
         ),
-        title: Text(title, style: const TextStyle(color: AppColors.textPrimary)),
+        title: Text(
+          title,
+          style: const TextStyle(color: AppColors.textPrimary),
+        ),
         subtitle: dueDate == null
             ? null
             : Text(

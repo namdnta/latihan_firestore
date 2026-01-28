@@ -3,10 +3,16 @@ import 'package:latihan_firestore/Component/app_textfield.dart';
 import 'package:latihan_firestore/Component/buttons.dart';
 import 'package:latihan_firestore/Component/category_dropdown.dart';
 import 'package:latihan_firestore/Component/colors.dart';
-import 'package:latihan_firestore/Component/priority_selector.dart' as chip_selector;
+import 'package:latihan_firestore/Component/priority_selector.dart'
+    as chip_selector;
 import 'package:latihan_firestore/Component/section_header.dart';
 import 'package:latihan_firestore/Component/date_picker_field.dart';
 import 'package:latihan_firestore/services/update.service.dart';
+import 'package:latihan_firestore/utils/responsive.dart';
+import 'package:latihan_firestore/Component/navbar.dart';
+import 'package:get/get.dart';
+import 'package:latihan_firestore/pages/mainpage.dart';
+import 'package:latihan_firestore/pages/form_page.dart';
 
 class EditPage extends StatefulWidget {
   final Map<String, dynamic> todo;
@@ -56,16 +62,16 @@ class _EditPageState extends State<EditPage> {
     if (!_formKey.currentState!.validate()) return;
 
     if (_selectedPriority == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a priority')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please select a priority')));
       return;
     }
 
     if (_selectedCategory == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a category')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please select a category')));
       return;
     }
 
@@ -105,10 +111,12 @@ class _EditPageState extends State<EditPage> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Error: $e'),
-        backgroundColor: AppColors.priorityHigh,
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: AppColors.priorityHigh,
+        ),
+      );
     } finally {
       setState(() {
         _isLoading = false;
@@ -138,90 +146,122 @@ class _EditPageState extends State<EditPage> {
                 ),
               ),
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(24),
+                padding: Responsive.pagePadding(context),
                 child: Form(
                   key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 8),
-                      AppTextField(
-                        label: 'Task Name',
-                        hintText: 'Enter task name',
-                        controller: _titleController,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Please enter a task name';
-                          }
-                          return null;
-                        }, maxLines: 1,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: Responsive.contentMaxWidth(context),
                       ),
-                      const SizedBox(height: 20),
-                      DatePickerField(
-                        label: 'Due Date',
-                        selectedDate: _selectedDate,
-                        onDateSelected: (date) {
-                          setState(() {
-                            _selectedDate = date;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      chip_selector.PrioritySelector(
-                        selectedPriority: _selectedPriority,
-                        onPriorityChanged: (priority) {
-                          setState(() {
-                            _selectedPriority = priority;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      CategoryDropdown(
-                        selectedCategory: _selectedCategory,
-                        onChanged: (category) {
-                          setState(() {
-                            _selectedCategory = category;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      AppTextField(
-                        label: 'Description',
-                        hintText: 'Add task description...',
-                        controller: _descriptionController,
-                        maxLines: 3, validator: (value) {
-                          return null;
-                          },
-                      ),
-                      const SizedBox(height: 40),
-                      Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: CustomButton(
-                              text: 'Cancel',
-                              onPressed: () => Navigator.pop(context),
-                              isSecondary: true,
-                            ),
+                          const SizedBox(height: 8),
+                          AppTextField(
+                            label: 'Task Name',
+                            hintText: 'Enter task name',
+                            controller: _titleController,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Please enter a task name';
+                              }
+                              return null;
+                            },
+                            maxLines: 1,
                           ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: CustomButton(
-                              text: 'Save',
-                              onPressed: _isLoading ? null : _updateTodo,
-                              icon: _isLoading ? null : Icons.save,
-                            ),
+                          const SizedBox(height: 20),
+                          DatePickerField(
+                            label: 'Due Date',
+                            selectedDate: _selectedDate,
+                            onDateSelected: (date) {
+                              setState(() {
+                                _selectedDate = date;
+                              });
+                            },
                           ),
+                          const SizedBox(height: 20),
+                          chip_selector.PrioritySelector(
+                            selectedPriority: _selectedPriority,
+                            onPriorityChanged: (priority) {
+                              setState(() {
+                                _selectedPriority = priority;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          CategoryDropdown(
+                            selectedCategory: _selectedCategory,
+                            onChanged: (category) {
+                              setState(() {
+                                _selectedCategory = category;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          AppTextField(
+                            label: 'Description',
+                            hintText: 'Add task description...',
+                            controller: _descriptionController,
+                            maxLines: 3,
+                            validator: (value) {
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 40),
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              final isWide = constraints.maxWidth >= 480;
+                              final children = <Widget>[
+                                Expanded(
+                                  child: CustomButton(
+                                    text: 'Cancel',
+                                    onPressed: () => Navigator.pop(context),
+                                    isSecondary: true,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: CustomButton(
+                                    text: 'Save',
+                                    onPressed: _isLoading ? null : _updateTodo,
+                                    icon: _isLoading ? null : Icons.save,
+                                  ),
+                                ),
+                              ];
+                              if (isWide) {
+                                return Row(children: children);
+                              }
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  CustomButton(
+                                    text: 'Save',
+                                    onPressed: _isLoading ? null : _updateTodo,
+                                    icon: _isLoading ? null : Icons.save,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  CustomButton(
+                                    text: 'Cancel',
+                                    onPressed: () => Navigator.pop(context),
+                                    isSecondary: true,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          if (_isLoading) ...[
+                            const SizedBox(height: 20),
+                            const Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.primaryGreen,
+                              ),
+                            ),
+                          ],
                         ],
                       ),
-                      if (_isLoading) ...[
-                        const SizedBox(height: 20),
-                        const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.primaryGreen,
-                          ),
-                        ),
-                      ],
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -229,7 +269,11 @@ class _EditPageState extends State<EditPage> {
           ),
         ],
       ),
-      bottomNavigationBar: null,
+      bottomNavigationBar: FloatingNavBar(
+        onToHistory: () => Get.toNamed('/history'),
+        onToAdd: () => Get.to(() => const TodoFormPage()),
+        onToMain: () => Get.offAll(() => const TodoListPage()),
+      ),
     );
   }
 }

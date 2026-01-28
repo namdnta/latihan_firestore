@@ -1,13 +1,14 @@
+import 'dart:math';
 import 'package:latihan_firestore/utils/firestore.realtime.dart';
-import 'package:uuid/uuid.dart';
 
 class IdGenerator {
-  static final Uuid _uuid = Uuid();
+  static final Random _rand = Random();
 
   static String generateShortUuid() {
-    final fullUuid = _uuid.v4();
-    final shortId = fullUuid.replaceAll('-', '').substring(0, 5).toLowerCase();
-    return shortId;
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    final id = List.generate(5, (_) => chars[_rand.nextInt(chars.length)])
+        .join();
+    return id;
   }
 
   static isIdExists(String id) async {
@@ -18,7 +19,6 @@ class IdGenerator {
       return false;
     }
   }
-
 }
 
 //

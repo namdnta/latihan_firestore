@@ -18,15 +18,17 @@ class ColorPalette extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: colors
-            .map((c) => Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: c,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: AppColors.lightGray),
-                  ),
-                ))
+            .map(
+              (c) => Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: c,
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: AppColors.lightGray),
+                ),
+              ),
+            )
             .toList(),
       ),
     );
