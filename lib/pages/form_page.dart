@@ -7,33 +7,23 @@ import 'package:latihan_firestore/Component/priority_selector.dart'
     as chip_selector;
 import 'package:latihan_firestore/Component/app_textfield.dart';
 import 'package:latihan_firestore/Component/date_picker_field.dart';
-import 'package:latihan_firestore/controller/create.controller.dart';
+import 'package:latihan_firestore/Component/colors.dart';
+import 'package:latihan_firestore/controller/todo_controller.dart';
 import 'package:latihan_firestore/utils/responsive.dart';
 
-class TodoFormPage extends StatefulWidget {
+class TodoFormPage extends StatelessWidget {
   const TodoFormPage({super.key});
 
   @override
-  State<TodoFormPage> createState() => _TodoFormPageState();
-}
-
-class _TodoFormPageState extends State<TodoFormPage> {
-  final _controller = CreateController();
-  final _formKey = GlobalKey<FormState>();
-
-  final _taskCtrl = TextEditingController();
-  DateTime? _dueDate;
-  String _priority = 'medium';
-  String? _category;
-
-  @override
   Widget build(BuildContext context) {
+    final TodoController controller = Get.find<TodoController>();
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: Responsive.pagePadding(context),
         child: Form(
-          key: _formKey,
+          key: controller.createFormKey,
           child: Align(
             alignment: Alignment.topCenter,
             child: ConstrainedBox(
@@ -50,7 +40,7 @@ class _TodoFormPageState extends State<TodoFormPage> {
                     children: [
                       AppTextField(
                         label: 'Task Name',
-                        controller: _taskCtrl,
+                        controller: controller.createTaskController,
                         validator: (v) => (v == null || v.trim().isEmpty)
                             ? 'Please enter a task name'
                             : null,
@@ -58,20 +48,26 @@ class _TodoFormPageState extends State<TodoFormPage> {
                         maxLines: 1,
                       ),
                       const SizedBox(height: 16),
-                      DatePickerField(
-                        label: 'Due Date',
-                        selectedDate: _dueDate,
-                        onDateSelected: (d) => setState(() => _dueDate = d),
+                      Obx(
+                        () => DatePickerField(
+                          label: 'Due Date',
+                          selectedDate: controller.createDueDate.value,
+                          onDateSelected: controller.updateCreateDueDate,
+                        ),
                       ),
                       const SizedBox(height: 16),
-                      chip_selector.PrioritySelector(
-                        selectedPriority: _priority,
-                        onPriorityChanged: (p) => setState(() => _priority = p),
+                      Obx(
+                        () => chip_selector.PrioritySelector(
+                          selectedPriority: controller.createPriority.value,
+                          onPriorityChanged: controller.updateCreatePriority,
+                        ),
                       ),
                       const SizedBox(height: 16),
-                      CategoryDropdown(
-                        selectedCategory: _category,
-                        onChanged: (c) => setState(() => _category = c),
+                      Obx(
+                        () => CategoryDropdown(
+                          selectedCategory: controller.createCategory.value,
+                          onChanged: controller.updateCreateCategory,
+                        ),
                       ),
                       const SizedBox(height: 24),
                       LayoutBuilder(
@@ -84,36 +80,22 @@ class _TodoFormPageState extends State<TodoFormPage> {
                                   child: CustomButton(
                                     text: 'Cancel',
                                     isSecondary: true,
-                                    onPressed: () => Get.back(),
+                                    onPressed: controller.cancelCreate,
                                   ),
                                 ),
                                 const SizedBox(width: 16),
                                 Expanded(
-                                  child: CustomButton(
-                                    text: 'Add',
-                                    icon: Icons.add,
-                                    onPressed: () async {
-                                      if (!_formKey.currentState!.validate()) {
-                                        return;
-                                      }
-                                      final result = await _controller
-                                          .createTodo(
-                                            taskName: _taskCtrl.text,
-                                            dueDate:
-                                                _dueDate?.toIso8601String() ??
-                                                '',
-                                            priority: _priority,
-                                            category: _category ?? 'study',
-                                          );
-                                      if (result['success'] == true) {
-                                        Get.back(result: true);
-                                      } else {
-                                        Get.snackbar(
-                                          'Error',
-                                          result['message'] ?? 'Failed',
-                                        );
-                                      }
-                                    },
+                                  child: Obx(
+                                    () => CustomButton(
+                                      text: 'Add',
+                                      icon: controller.isCreateLoading.value
+                                          ? null
+                                          : Icons.add,
+                                      onPressed:
+                                          controller.isCreateLoading.value
+                                          ? null
+                                          : controller.createTodoFromForm,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -122,38 +104,38 @@ class _TodoFormPageState extends State<TodoFormPage> {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              CustomButton(
-                                text: 'Add',
-                                icon: Icons.add,
-                                onPressed: () async {
-                                  if (!_formKey.currentState!.validate()) {
-                                    return;
-                                  }
-                                  final result = await _controller.createTodo(
-                                    taskName: _taskCtrl.text,
-                                    dueDate: _dueDate?.toIso8601String() ?? '',
-                                    priority: _priority,
-                                    category: _category ?? 'study',
-                                  );
-                                  if (result['success'] == true) {
-                                    Get.back(result: true);
-                                  } else {
-                                    Get.snackbar(
-                                      'Error',
-                                      result['message'] ?? 'Failed',
-                                    );
-                                  }
-                                },
+                              Obx(
+                                () => CustomButton(
+                                  text: 'Add',
+                                  icon: controller.isCreateLoading.value
+                                      ? null
+                                      : Icons.add,
+                                  onPressed: controller.isCreateLoading.value
+                                      ? null
+                                      : controller.createTodoFromForm,
+                                ),
                               ),
                               const SizedBox(height: 12),
                               CustomButton(
                                 text: 'Cancel',
                                 isSecondary: true,
-                                onPressed: () => Get.back(),
+                                onPressed: controller.cancelCreate,
                               ),
                             ],
                           );
                         },
+                      ),
+                      Obx(
+                        () => controller.isCreateLoading.value
+                            ? const Padding(
+                                padding: EdgeInsets.only(top: 20),
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
                       ),
                     ],
                   ),
