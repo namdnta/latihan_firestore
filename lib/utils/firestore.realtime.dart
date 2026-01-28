@@ -78,13 +78,13 @@ class DatabaseService {
         snapshot.snapshot.value as Map<dynamic, dynamic>;
 
     for (var key in todos.keys) {
-      await todoRef(key.toString()).update({
-        'isDone': true,
-        'updatedAt': DateTime.now().toIso8601String(),
-      });
+      await todoRef(
+        key.toString(),
+      ).update({'isDone': true, 'updatedAt': DateTime.now().toIso8601String()});
     }
 
     log('✅ All todos marked as completed');
   }
 }
+
 //

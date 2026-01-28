@@ -5,7 +5,6 @@ import 'package:latihan_firestore/controller/delete.controller.dart';
 import 'package:latihan_firestore/controller/todo_controller.dart';
 import 'package:latihan_firestore/pages/edit_page.dart';
 
-
 class TodoCard extends StatelessWidget {
   final Map<String, dynamic> todo;
 
@@ -33,8 +32,18 @@ class TodoCard extends StatelessWidget {
       if (diffDays < -1 && diffDays >= -7) return '${-diffDays} days ago';
 
       const months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ];
       return '${dateOnly.day} ${months[dateOnly.month - 1]} ${dateOnly.year}';
     }
@@ -57,8 +66,7 @@ class TodoCard extends StatelessWidget {
           Checkbox(
             value: todo['isDone'] == true,
             activeColor: AppColors.primaryGreen,
-            onChanged: (_) =>
-                todoController.toggleTodoCompletion(todo['id']),
+            onChanged: (_) => todoController.toggleTodoCompletion(todo['id']),
           ),
           Expanded(
             child: Column(
@@ -100,15 +108,16 @@ class TodoCard extends StatelessWidget {
               final confirm = await Get.dialog<bool>(
                 AlertDialog(
                   title: const Text('Hold Up!'),
-                  content:
-                      Text('Delete "${todo['taskName']}" ?'),
+                  content: Text('Delete "${todo['taskName']}" ?'),
                   actions: [
                     TextButton(
-                        onPressed: () => Get.back(result: false),
-                        child: const Text('Cancel')),
+                      onPressed: () => Get.back(result: false),
+                      child: const Text('Cancel'),
+                    ),
                     TextButton(
-                        onPressed: () => Get.back(result: true),
-                        child: const Text('Delete')),
+                      onPressed: () => Get.back(result: true),
+                      child: const Text('Delete'),
+                    ),
                   ],
                 ),
               );

@@ -36,14 +36,14 @@ class TodoModel {
   }
 
   Map<String, dynamic> toMap() => {
-        'id': id,
-        'taskName': taskName,
-        'dueDate': dueDate,
-        'priority': priority,
-        'category': category,
-        'description': description,
-        'isDone': isDone,
-        'createdAt': createdAt,
-        'updatedAt': updatedAt,
-      };
+    'id': id,
+    'taskName': taskName,
+    'dueDate': dueDate,
+    'priority': priority,
+    'category': category,
+    'description': description,
+    'isDone': isDone,
+    'createdAt': createdAt,
+    'updatedAt': updatedAt,
+  };
 }

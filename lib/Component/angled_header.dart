@@ -7,11 +7,7 @@ class AngledHeader extends StatelessWidget {
   final String title;
   final double height;
 
-  const AngledHeader({
-    super.key,
-    required this.title,
-    this.height = 120,
-  });
+  const AngledHeader({super.key, required this.title, this.height = 120});
 
   @override
   Widget build(BuildContext context) {
@@ -21,24 +17,18 @@ class AngledHeader extends StatelessWidget {
       child: Stack(
         children: [
           // Base background
-          Container(
-            color: AppColors.background,
-          ),
+          Container(color: AppColors.background),
 
           // Back layer (lighter green)
           ClipPath(
             clipper: _BackSlantClipper(),
-            child: Container(
-              color: AppColors.primaryGreen.withOpacity(0.65),
-            ),
+            child: Container(color: AppColors.primaryGreen.withOpacity(0.65)),
           ),
 
           // Front layer (main green)
           ClipPath(
             clipper: _FrontSlantClipper(),
-            child: Container(
-              color: AppColors.primaryGreen,
-            ),
+            child: Container(color: AppColors.primaryGreen),
           ),
 
           // Title

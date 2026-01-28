@@ -6,6 +6,7 @@ import 'package:latihan_firestore/Component/navbar.dart';
 import 'package:latihan_firestore/Component/angled_header.dart';
 import 'package:latihan_firestore/controller/todo_controller.dart';
 import 'package:latihan_firestore/pages/form_page.dart';
+import 'package:latihan_firestore/utils/responsive.dart';
 
 class TodoListPage extends StatelessWidget {
   const TodoListPage({super.key});
@@ -23,34 +24,78 @@ class TodoListPage extends StatelessWidget {
 
         final todos = controller.todos.where((t) => t['isDone'] != true);
 
-        final study = todos.where((t) => (t['category'] ?? '').toString().toLowerCase() == 'study');
-        final work = todos.where((t) => (t['category'] ?? '').toString().toLowerCase() == 'work');
+        final study = todos.where(
+          (t) => (t['category'] ?? '').toString().toLowerCase() == 'study',
+        );
+        final work = todos.where(
+          (t) => (t['category'] ?? '').toString().toLowerCase() == 'work',
+        );
 
-        List<Widget> section(String title, Iterable<Map<String, dynamic>> items) {
+        List<Widget> section(
+          String title,
+          Iterable<Map<String, dynamic>> items,
+        ) {
           if (items.isEmpty) return [];
+          final list = items.toList();
+          final crossAxisCount = Responsive.value(
+            context: context,
+            mobile: 1,
+            tablet: 2,
+            desktop: 3,
+          );
           return [
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Row(
                 children: [
-                  Text(title,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 14)),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  ),
                 ],
               ),
             ),
-            ...items.map((todo) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: legacy_card.TodoCard(todo: todo),
-                )),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 12,
+                childAspectRatio: 3.5,
+              ),
+              itemCount: list.length,
+              itemBuilder: (context, index) {
+                final todo = list[index];
+                return legacy_card.TodoCard(todo: todo);
+              },
+            ),
           ];
         }
 
         return ListView(
+          padding: Responsive.pagePadding(context),
           children: [
             const AngledHeader(title: 'To Do'),
-            ...section('Study', study),
-            ...section('Work', work),
+            Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: Responsive.contentMaxWidth(context),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ...section('Study', study),
+                    ...section('Work', work),
+                  ],
+                ),
+              ),
+            ),
           ],
         );
       }),

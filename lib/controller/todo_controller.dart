@@ -154,7 +154,6 @@ class TodoController extends GetxController {
     required bool wasDoneBefore,
     required bool isDoneNow,
   }) async {
-
     if (!wasDoneBefore && isDoneNow) {
       await _historyService.logCompletion(
         todoId: id,
@@ -162,9 +161,7 @@ class TodoController extends GetxController {
         userId: _currentUserId.value,
       );
       log('🎯 Todo marked as COMPLETED - history logged');
-    }
-
-    else if (wasDoneBefore && !isDoneNow) {
+    } else if (wasDoneBefore && !isDoneNow) {
       await _historyService.logReopen(
         todoId: id,
         todoData: newData,
