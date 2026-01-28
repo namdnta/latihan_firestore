@@ -9,7 +9,7 @@ class DeleteController {
   final HistoryService _historyService = HistoryService();
 
   Future<Map<String, dynamic>> deleteTodo(String id) async {
-    log('🎛️ DeleteController: Processing delete request for $id');
+    log('DeleteController: Processing delete request for $id');
 
     try {
       // 1. Get data sebelum dihapus (untuk history)
@@ -52,16 +52,14 @@ class DeleteController {
           reason: 'User deleted from app',
         );
 
-        log('✅ DeleteController: Todo $id deleted + history logged');
+        log('DeleteController: Todo $id deleted + history logged');
       } else {
-        log(
-          '❌ DeleteController: Failed: ${result['error'] ?? "Unknown error"}',
-        ); // ⭐ FIX NULL
+        log('DeleteController: Failed: ${result['error'] ?? "Unknown error"}');
       }
 
       return result;
     } catch (e) {
-      log('❌ DeleteController Error: $e');
+      log('DeleteController Error: $e');
       return {
         'success': false,
         'error': 'Exception',
@@ -71,7 +69,7 @@ class DeleteController {
   }
 
   Future<Map<String, dynamic>> deleteMultipleTodos(List<String> ids) async {
-    log('🎛️ DeleteController: Processing delete for ${ids.length} todos');
+    log('DeleteController: Processing delete for ${ids.length} todos');
 
     // Validation
     if (ids.isEmpty) {
@@ -129,9 +127,9 @@ class DeleteController {
         );
       }
 
-      log('📊 DeleteController: ${result['message']} + history logged');
+      log('DeleteController: ${result['message']} + history logged');
     } else {
-      log('📊 DeleteController: ${result['message']}');
+      log('DeleteController: ${result['message']}');
     }
 
     return result;

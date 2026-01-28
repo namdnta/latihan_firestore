@@ -5,7 +5,7 @@ class DeleteService {
   // DELETE TODO
   Future<Map<String, dynamic>> deleteTodo(String id) async {
     try {
-      log('🗑️ DeleteService: Deleting todo $id...');
+      log('DeleteService: Deleting todo $id...');
 
       // 1. Check if exists
       final snapshot = await DatabaseService.todoRef(id).once();
@@ -19,7 +19,7 @@ class DeleteService {
 
       // 2. Delete
       await DatabaseService.todoRef(id).remove();
-      log('✅ Todo $id deleted');
+      log('Todo $id deleted');
 
       return {
         'success': true,
@@ -39,7 +39,7 @@ class DeleteService {
   // DELETE MULTIPLE TODOS
   Future<Map<String, dynamic>> deleteMultiple(List<String> ids) async {
     try {
-      log('🗑️ DeleteService: Deleting ${ids.length} todos...');
+      log('DeleteService: Deleting ${ids.length} todos...');
 
       int successCount = 0;
       List<String> failedIds = [];
